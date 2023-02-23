@@ -5,9 +5,9 @@ import * as S from "./styles";
 
 interface ICard extends TouchableOpacityProps {
   name: string;
-  weight: string;
+  weight: number;
   color: string;
-  length: string;
+  length: number;
 }
 
 const Card = ({ name, weight, length, color, ...rest }: ICard) => {
