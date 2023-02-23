@@ -98,6 +98,11 @@ const Home: React.FC = () => {
             name={item.name}
             weight={item.weight}
             length={item.length}
+            probability={`${
+              item.probability
+                ? Math.floor(item?.probability * 100) + "%"
+                : "à calcular"
+            }`}
           />
         )}
       />

@@ -3,4 +3,5 @@ export interface IAnts {
   length: number;
   color: string;
   weight: number;
+  probability?: number;
 }

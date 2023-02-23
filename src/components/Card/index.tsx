@@ -8,9 +8,10 @@ interface ICard extends TouchableOpacityProps {
   weight: number;
   color: string;
   length: number;
+  probability?: string;
 }
 
-const Card = ({ name, weight, length, color, ...rest }: ICard) => {
+const Card = ({ name, weight, length, color, probability, ...rest }: ICard) => {
   return (
     <S.Container {...rest}>
       <S.Row>
@@ -18,6 +19,7 @@ const Card = ({ name, weight, length, color, ...rest }: ICard) => {
           <S.Title>{name}</S.Title>
           <S.Description>weight: {weight}</S.Description>
           <S.Description>lenght: {length}</S.Description>
+          <S.Title>Probabilidade: {probability}</S.Title>
         </S.Column>
       </S.Row>
     </S.Container>
