@@ -70,6 +70,9 @@ const Home: React.FC = () => {
       await generateAntWinLikelihoodCalculator()((callback) => {
         setLoading(true);
         ants[index].probability = callback;
+        console.log("ants", ants);
+        ants.sort((a, b) => (b.probability > a.probability ? 1 : -1));
+        antsUpdated.sort((a, b) => (b.probability > a.probability ? 1 : -1));
         setLoading(false);
       });
       antsUpdated.push(item);
