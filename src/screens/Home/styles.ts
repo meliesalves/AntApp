@@ -36,6 +36,8 @@ export const Header = styled.View`
 
 export const Column = styled.View``;
 
+export const List = styled.FlatList``;
+
 export const ContainerButton = styled.View`
   padding: 24px 24px ${getStatusBarHeight()}px 24px;
   background-color: ${({ theme }) => theme.colors.gray};

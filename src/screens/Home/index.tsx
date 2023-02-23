@@ -1,24 +1,25 @@
-import React, { useLayoutEffect } from "react";
-
-import Feather from "@expo/vector-icons/Feather";
+import React, {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useState,
+} from "react";
 
 import Button from "@src/components/Button";
 import theme from "theme";
 
 import * as S from "./styles";
 import { useNavigation } from "@react-navigation/native";
-import { NavButton } from "components/Button/styles";
+
 import Card from "components/Card";
+import { getAnts } from "services/api";
+import { IAnts } from "@src/@types/ants";
+import { ActivityIndicator } from "react-native";
 
 const Home: React.FC = () => {
   const navigation = useNavigation();
-  // if (loading) {
-  //   return (
-  //     <S.ContainerLoading>
-  //       <ActivityIndicator color={theme.colors.gray_light} size="large" />
-  //     </S.ContainerLoading>
-  //   );
-  // }
+  const [loading, setLoading] = useState<boolean>();
+  const [ants, setAnts] = useState<IAnts[]>();
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -26,9 +27,42 @@ const Home: React.FC = () => {
     });
   }, [navigation]);
 
+  const getAntsInfo = useCallback(async () => {
+    try {
+      setLoading(true);
+      const { data } = await getAnts();
+      setAnts(data.ants);
+    } catch (error) {
+      throw new Error("Não conseguimos carregar seus dados", error);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    getAntsInfo();
+  }, []);
+
+  if (loading) {
+    return (
+      <S.ContainerLoading>
+        <ActivityIndicator color={theme.colors.gray_light} size="large" />
+      </S.ContainerLoading>
+    );
+  }
   return (
     <S.Container>
-      <Card color="black" name="Test" weight="teste" length="teste" />
+      <S.List
+        data={ants}
+        renderItem={({ item }: { item: IAnts }) => (
+          <Card
+            color={item.color}
+            name={item.name}
+            weight={item.weight}
+            length={item.length}
+          />
+        )}
+      />
 
       <S.ContainerButton>
         <Button
