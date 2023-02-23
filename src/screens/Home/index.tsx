@@ -28,7 +28,7 @@ const Home: React.FC = () => {
     navigation.setOptions({
       title: "Formigas",
       headerRight: () => (
-        <NavButton onPress={() => getAnts()}>
+        <NavButton onPress={() => getAntsInfo()}>
           <Feather
             name="refresh-ccw"
             size={24}
@@ -56,26 +56,31 @@ const Home: React.FC = () => {
     const likelihoodOfAntWinning = Math.random();
 
     return (callback) => {
+      callback("calculando");
       setTimeout(() => {
         callback(likelihoodOfAntWinning);
       }, delay);
-      console.log("callback", callback);
     };
   }
 
-  const calculateProbability = () => {
-    ants.map((item, index) => {
-      generateAntWinLikelihoodCalculator()((callback) => {
+  const calculateProbability = async () => {
+    let antsUpdated = [];
+
+    await ants.map(async (item, index) => {
+      await generateAntWinLikelihoodCalculator()((callback) => {
         setLoading(true);
-        ants[index]["probability"] = callback;
+        ants[index].probability = callback;
         setLoading(false);
       });
+      antsUpdated.push(item);
     });
-  };
 
-  useEffect(() => {
-    console.log("ants", ants);
-  }, [ants, loading]);
+    setAnts(
+      antsUpdated.sort((a, b) => {
+        return a.probability - b.probability;
+      })
+    );
+  };
 
   useEffect(() => {
     getAntsInfo();
@@ -100,7 +105,9 @@ const Home: React.FC = () => {
             length={item.length}
             probability={`${
               item.probability
-                ? Math.floor(item?.probability * 100) + "%"
+                ? typeof item.probability === "string"
+                  ? "calculando"
+                  : Math.floor(item?.probability * 100) + "%"
                 : "à calcular"
             }`}
           />
