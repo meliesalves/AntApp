@@ -16,8 +16,8 @@ const Card = ({ name, weight, length, color, ...rest }: ICard) => {
       <S.Row>
         <S.Column>
           <S.Title>{name}</S.Title>
-          <S.Description>{weight}</S.Description>
-          <S.Description>{length}</S.Description>
+          <S.Description>weight: {weight}</S.Description>
+          <S.Description>lenght: {length}</S.Description>
         </S.Column>
       </S.Row>
     </S.Container>

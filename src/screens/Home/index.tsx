@@ -5,6 +5,8 @@ import React, {
   useState,
 } from "react";
 
+import Feather from "@expo/vector-icons/Feather";
+
 import Button from "@src/components/Button";
 import theme from "theme";
 
@@ -15,6 +17,7 @@ import Card from "components/Card";
 import { getAnts } from "services/api";
 import { IAnts } from "@src/@types/ants";
 import { ActivityIndicator } from "react-native";
+import { NavButton } from "components/Button/styles";
 
 const Home: React.FC = () => {
   const navigation = useNavigation();
@@ -24,6 +27,15 @@ const Home: React.FC = () => {
   useLayoutEffect(() => {
     navigation.setOptions({
       title: "Formigas",
+      headerRight: () => (
+        <NavButton onPress={() => getAnts()}>
+          <Feather
+            name="refresh-ccw"
+            size={24}
+            color={theme.colors.secondary}
+          />
+        </NavButton>
+      ),
     });
   }, [navigation]);
 
@@ -38,6 +50,32 @@ const Home: React.FC = () => {
       setLoading(false);
     }
   }, []);
+
+  function generateAntWinLikelihoodCalculator() {
+    const delay = 7000 + Math.random() * 7000;
+    const likelihoodOfAntWinning = Math.random();
+
+    return (callback) => {
+      setTimeout(() => {
+        callback(likelihoodOfAntWinning);
+      }, delay);
+      console.log("callback", callback);
+    };
+  }
+
+  const calculateProbability = () => {
+    ants.map((item, index) => {
+      generateAntWinLikelihoodCalculator()((callback) => {
+        setLoading(true);
+        ants[index]["probability"] = callback;
+        setLoading(false);
+      });
+    });
+  };
+
+  useEffect(() => {
+    console.log("ants", ants);
+  }, [ants, loading]);
 
   useEffect(() => {
     getAntsInfo();
@@ -69,7 +107,7 @@ const Home: React.FC = () => {
           title="Iniciar corrida"
           color={theme.colors.secondary}
           titleColor={theme.colors.primary}
-          // onPress={() => navigation.navigate("AddOrUpdate", { type: "create" })}
+          onPress={calculateProbability}
         />
       </S.ContainerButton>
     </S.Container>
