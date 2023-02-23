@@ -18,6 +18,7 @@ import { getAnts } from "services/api";
 import { IAnts } from "@src/@types/ants";
 import { ActivityIndicator } from "react-native";
 import { NavButton } from "components/Button/styles";
+import { generateAntWinLikelihoodCalculator } from "utils/helpers/calculateProbability";
 
 const Home: React.FC = () => {
   const navigation = useNavigation();
@@ -51,18 +52,6 @@ const Home: React.FC = () => {
     }
   }, []);
 
-  function generateAntWinLikelihoodCalculator() {
-    const delay = 7000 + Math.random() * 7000;
-    const likelihoodOfAntWinning = Math.random();
-
-    return (callback) => {
-      callback("calculando");
-      setTimeout(() => {
-        callback(likelihoodOfAntWinning);
-      }, delay);
-    };
-  }
-
   const calculateProbability = async () => {
     let antsUpdated = [];
 
@@ -70,19 +59,13 @@ const Home: React.FC = () => {
       await generateAntWinLikelihoodCalculator()((callback) => {
         setLoading(true);
         ants[index].probability = callback;
-        console.log("ants", ants);
-        ants.sort((a, b) => (b.probability > a.probability ? 1 : -1));
         antsUpdated.sort((a, b) => (b.probability > a.probability ? 1 : -1));
         setLoading(false);
       });
       antsUpdated.push(item);
     });
 
-    setAnts(
-      antsUpdated.sort((a, b) => {
-        return a.probability - b.probability;
-      })
-    );
+    setAnts(antsUpdated);
   };
 
   useEffect(() => {
