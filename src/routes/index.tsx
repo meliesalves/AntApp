@@ -9,10 +9,8 @@ import {
 import { NavigationContainer } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
 import React from "react";
-import { Provider } from "react-redux";
-import { ThemeProvider } from "styled-components/native";
 
-import { store } from "store";
+import { ThemeProvider } from "styled-components/native";
 
 import theme from "../theme";
 import MyStack from "./stack.routes";
@@ -29,14 +27,12 @@ function Routes() {
   if (!fontsLoaded) return <></>;
 
   return (
-    <Provider store={store}>
-      <ThemeProvider theme={theme}>
-        <StatusBar style="light" backgroundColor={theme.colors.gray_dark} />
-        <NavigationContainer>
-          <MyStack />
-        </NavigationContainer>
-      </ThemeProvider>
-    </Provider>
+    <ThemeProvider theme={theme}>
+      <StatusBar style="light" backgroundColor={theme.colors.gray_dark} />
+      <NavigationContainer>
+        <MyStack />
+      </NavigationContainer>
+    </ThemeProvider>
   );
 }
 
